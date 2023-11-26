@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -14,11 +15,11 @@ internal static class MainClass {
         if (!args.Any()) {
             string selfExecutable = Assembly.GetExecutingAssembly().GetName().Name;
             MessageBox.Show($"""
-                 {selfExecutable} EXECUTABLE [ARGUMENT]...
-                 
-                 Example:
-                 {selfExecutable} "C:\Program Files\Git\usr\bin\gpg-agent.exe" --daemon
-                 """,
+                             {selfExecutable} EXECUTABLE [ARGUMENT]...
+
+                             Example:
+                             {selfExecutable} "C:\Program Files\Git\usr\bin\gpg-agent.exe" --daemon
+                             """,
                 "Ben's Hidden Start usage", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return 0;
         }
@@ -29,6 +30,7 @@ internal static class MainClass {
         ProcessStartInfo startInfo = new() {
             FileName               = executable,
             Arguments              = arguments,
+            WorkingDirectory       = Path.GetDirectoryName(executable) ?? string.Empty,
             CreateNoWindow         = true,
             UseShellExecute        = false,
             RedirectStandardOutput = true,
